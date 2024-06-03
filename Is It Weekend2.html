@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wochenend-Checker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 50px;
+  }
+  #confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+  }
+</style>
+</head>
+<body>
+  <h1>Is it Weekend?</h1>
+  <div id="result"></div>
+  <script src="https://cdn.jsdelivr.net/npm/confetti-js"></script>
+  <canvas id="confettiCanvas"></canvas>
+  <script>
+    function istWochenende() {
+      const heute = new Date();
+      const tag = heute.getDay();
+      return tag === 0 || tag === 6 || (tag === 5 && heute.getHours() >= 18); // Samstag, Sonntag oder Freitag nach 18 Uhr
+    }
+
+    function zeigeErgebnis() {
+      const ergebnis = document.getElementById('result');
+      const confettiCanvas = document.getElementById('confettiCanvas');
+
+      if (istWochenende()) {
+        ergebnis.textContent = 'Yes, Hurra!';
+        starteKonfetti();
+      } else {
+        ergebnis.textContent = 'Nope';
+        stoppeKonfetti();
+      }
+    }
+
+    function starteKonfetti() {
+      const confettiSettings = { target: 'confettiCanvas', max: 200 };
+      const confetti = new ConfettiGenerator(confettiSettings);
+      confetti.render();
+    }
+
+    function stoppeKonfetti() {
+      const confettiCanvas = document.getElementById('confettiCanvas');
+      const context = confettiCanvas.getContext('2d');
+      context.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+
+    window.onload = zeigeErgebnis;
+  </script>
+</body>
+</html>
